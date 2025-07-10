@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Programmer Converter</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        background-color: #f4f4f4;
+    }
+    .converter {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 500px;
+        margin: auto;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 5px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    label {
+        font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+
+<div class="converter">
+    <h2>Programmer Converter</h2>
+
+    <label for="decimal">Decimal</label>
+    <input type="text" id="decimal" oninput="fromDecimal()">
+
+    <label for="binary">Binary</label>
+    <input type="text" id="binary" oninput="fromBinary()">
+
+    <label for="octal">Octal</label>
+    <input type="text" id="octal" oninput="fromOctal()">
+
+    <label for="hex">Hexadecimal</label>
+    <input type="text" id="hex" oninput="fromHex()">
+</div>
+
+<script>
+function clearAllExcept(exceptId) {
+        ['decimal', 'binary', 'octal', 'hex'].forEach(id => {
+        if (id !== exceptId) document.getElementById(id).oninput = null;
+    });
+}
+
+function restoreListeners() {
+        document.getElementById('decimal').oninput = fromDecimal;
+        document.getElementById('binary').oninput = fromBinary;
+        document.getElementById('octal').oninput = fromOctal;
+        document.getElementById('hex').oninput = fromHex;
+}
+
+function fromDecimal() {
+        clearAllExcept('decimal');
+        let d = parseInt(document.getElementById("decimal").value);
+    if (!isNaN(d)) {
+        document.getElementById("binary").value = d.toString(2);
+        document.getElementById("octal").value = d.toString(8);
+        document.getElementById("hex").value = d.toString(16).toUpperCase();
+    } else {
+        document.getElementById("binary").value = "";
+        document.getElementById("octal").value = "";
+        document.getElementById("hex").value = "";
+    }
+    restoreListeners();
+}
+
+function fromBinary() {
+        clearAllExcept('binary');
+        let b = document.getElementById("binary").value;
+        let d = parseInt(b, 2);
+        if (!isNaN(d)) {
+        document.getElementById("decimal").value = d;
+        document.getElementById("octal").value = d.toString(8);
+        document.getElementById("hex").value = d.toString(16).toUpperCase();
+    } else {
+        document.getElementById("decimal").value = "";
+        document.getElementById("octal").value = "";
+        document.getElementById("hex").value = "";
+    }
+    restoreListeners();
+}
+
+function fromOctal() {
+    clearAllExcept('octal');
+    let o = document.getElementById("octal").value;
+    let d = parseInt(o, 8);
+    if (!isNaN(d)) {
+        document.getElementById("decimal").value = d;
+        document.getElementById("binary").value = d.toString(2);
+        document.getElementById("hex").value = d.toString(16).toUpperCase();
+    } else {
+        document.getElementById("decimal").value = "";
+        document.getElementById("binary").value = "";
+        document.getElementById("hex").value = "";
+    }
+    restoreListeners();
+}
+
+function fromHex() {
+    clearAllExcept('hex');
+    let h = document.getElementById("hex").value;
+    let d = parseInt(h, 16);
+    if (!isNaN(d)) {
+        document.getElementById("decimal").value = d;
+        document.getElementById("binary").value = d.toString(2);
+        document.getElementById("octal").value = d.toString(8);
+    } else {
+        document.getElementById("decimal").value = "";
+        document.getElementById("binary").value = "";
+        document.getElementById("octal").value = "";
+    }
+    restoreListeners();
+}
+</script>
+<footer>
+    <div>
+        <p class="copyright">© 2024 Darshil k prajapati. All rights reserved.</p>
+    </div>
+        
+</footer>
+
+</body>
+</html>
