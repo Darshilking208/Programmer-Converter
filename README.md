@@ -1,4 +1,41 @@
-# Programmer-Converter
-Convert numbers to Hex, Octal, Binary and Decimal
-<be>  
-Programmer Number Converter is a simple web-based tool that allows users to input a decimal number and instantly view its equivalent in Hexadecimal, Octal, and Binary formats. It's built using HTML, CSS, and JavaScript—ideal for students, programmers, and anyone learning number systems.
+# 🧮 Programmer Converter – Web Tool
+
+This is a simple yet powerful **Programmer Converter** built with pure HTML, CSS, and JavaScript. It enables users to convert numbers between different numeral systems:
+
+- **Decimal**
+- **Binary**
+- **Octal**
+- **Hexadecimal**
+
+Ideal for programmers, students, and developers who regularly work with multiple bases.
+
+---
+
+## 🚀 Features
+
+- 🔄 Real-time bidirectional conversion
+- ✅ Clean and responsive UI
+- 💻 Works 100% offline
+- 📱 Mobile-friendly
+- 🔡 Uppercase hexadecimal output
+
+---
+
+## 💡 How to Use
+
+1. Open the HTML file in your browser:
+   - `programmer_converter.html`
+2. Enter a number in any one input field (Decimal, Binary, Octal, or Hex).
+3. The other fields will update instantly.
+
+---
+
+## 🌐 Live Demo
+
+👉 [Click here to view the live demo](https://yourusername.github.io/programmer-converter/)  
+*(Replace `yourusername` with your actual GitHub username after deploying)*
+
+---
+
+## 📂 Project Structure
+
