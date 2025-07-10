@@ -33,7 +33,6 @@ Ideal for programmers, students, and developers who regularly work with multiple
 ## 🌐 Live Demo
 
 👉 [Click here to view the live demo](https://yourusername.github.io/programmer-converter/)  
-*(Replace `yourusername` with your actual GitHub username after deploying)*
 
 ---
 
