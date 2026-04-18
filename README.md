@@ -32,7 +32,7 @@ Ideal for programmers, students, and developers who regularly work with multiple
 
 ## 🌐 Live Demo
 
-👉 [Click here to view the live demo](https://darshilking208.github.io/programmer-converter/)  
+👉 [Click here to view the live demo](https://darshilking208.github.io/Programmer-Converter/)  
 
 ---
 
