@@ -2,136 +2,557 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Programmer Converter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A professional number system converter supporting decimal, binary, octal, and hexadecimal formats.">
+    <title>Programmer Converter - Base Number System Converter</title>
     <style>
-    body {
-        font-family: Arial, sans-serif;
-        padding: 30px;
-        background-color: #f4f4f4;
-    }
-    .converter {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        max-width: 500px;
-        margin: auto;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input {
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        margin-top: 5px;
-        margin-bottom: 20px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-    label {
-        font-weight: bold;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --success-color: #27ae60;
+            --error-color: #e74c3c;
+            --background: #ecf0f1;
+            --card-bg: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border-color: #bdc3c7;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #d5dce0 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        .container:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .converter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .label-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            padding: 12px 14px;
+            font-size: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            transition: var(--transition);
+            font-family: 'Monaco', 'Courier New', monospace;
+            letter-spacing: 0.3px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            background: rgba(52, 152, 219, 0.02);
+        }
+
+        input[type="text"].error {
+            border-color: var(--error-color);
+            background: rgba(231, 76, 60, 0.05);
+        }
+
+        input[type="text"].error:focus {
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .error-message {
+            font-size: 12px;
+            color: var(--error-color);
+            margin-top: 4px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-reset {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-reset:active {
+            transform: translateY(0);
+        }
+
+        .btn-copy {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-copy:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-copy:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            background: rgba(52, 152, 219, 0.08);
+            border-left: 4px solid var(--primary-color);
+            padding: 14px;
+            border-radius: 6px;
+            margin-top: 24px;
+            font-size: 13px;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        footer {
+            background: var(--text-primary);
+            color: white;
+            text-align: center;
+            padding: 24px 20px;
+            font-size: 13px;
+            margin-top: auto;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success-color);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.3s ease;
+            max-width: 300px;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 24px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .converter-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .toast {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
+    <main>
+        <div class="container">
+            <div class="header">
+                <h1>Programmer Converter</h1>
+                <p>Convert between decimal, binary, octal, and hexadecimal number systems</p>
+            </div>
 
-<div class="converter">
-    <h2>Programmer Converter</h2>
+            <div class="converter-grid" id="converterGrid"></div>
 
-    <label for="decimal">Decimal</label>
-    <input type="text" id="decimal" oninput="fromDecimal()">
+            <div class="controls">
+                <button class="btn-reset" type="button" id="resetBtn" aria-label="Reset all fields">Clear All</button>
+                <button class="btn-copy" type="button" id="copyAllBtn" aria-label="Copy all values">Copy All</button>
+            </div>
 
-    <label for="binary">Binary</label>
-    <input type="text" id="binary" oninput="fromBinary()">
+            <div class="info-box">
+                <strong>Tip:</strong> Enter any number in any base to automatically convert it to all other bases. Supports positive integers and decimal numbers.
+            </div>
+        </div>
+    </main>
 
-    <label for="octal">Octal</label>
-    <input type="text" id="octal" oninput="fromOctal()">
+    <footer>
+        <p>&copy; 2024 Darshil K Prajapati. All rights reserved. | <a href="https://github.com/Darshilking208" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+    </footer>
 
-    <label for="hex">Hexadecimal</label>
-    <input type="text" id="hex" oninput="fromHex()">
-</div>
+    <script>
+        /**
+         * ConverterApp - A professional number system converter
+         * Supports: Decimal, Binary, Octal, Hexadecimal
+         */
+        class ConverterApp {
+            constructor() {
+                this.bases = [
+                    { id: 'decimal', name: 'Decimal', base: 10, icon: '10', regex: /^-?\d*\.?\d*$/ },
+                    { id: 'binary', name: 'Binary', base: 2, icon: '2', regex: /^[01]*$/ },
+                    { id: 'octal', name: 'Octal', base: 8, icon: '8', regex: /^[0-7]*$/ },
+                    { id: 'hex', name: 'Hexadecimal', base: 16, icon: '16', regex: /^[0-9A-Fa-f]*$/ }
+                ];
 
-<script>
-function clearAllExcept(exceptId) {
-        ['decimal', 'binary', 'octal', 'hex'].forEach(id => {
-        if (id !== exceptId) document.getElementById(id).oninput = null;
-    });
-}
+                this.currentInput = null;
+                this.init();
+            }
 
-function restoreListeners() {
-        document.getElementById('decimal').oninput = fromDecimal;
-        document.getElementById('binary').oninput = fromBinary;
-        document.getElementById('octal').oninput = fromOctal;
-        document.getElementById('hex').oninput = fromHex;
-}
+            init() {
+                this.renderConverterGrid();
+                this.attachEventListeners();
+            }
 
-function fromDecimal() {
-        clearAllExcept('decimal');
-        let d = parseInt(document.getElementById("decimal").value);
-    if (!isNaN(d)) {
-        document.getElementById("binary").value = d.toString(2);
-        document.getElementById("octal").value = d.toString(8);
-        document.getElementById("hex").value = d.toString(16).toUpperCase();
-    } else {
-        document.getElementById("binary").value = "";
-        document.getElementById("octal").value = "";
-        document.getElementById("hex").value = "";
-    }
-    restoreListeners();
-}
+            renderConverterGrid() {
+                const grid = document.getElementById('converterGrid');
+                grid.innerHTML = this.bases.map(base => `
+                    <div class="input-group">
+                        <label for="${base.id}">
+                            <span class="label-badge">${base.icon}</span>
+                            ${base.name}
+                        </label>
+                        <input
+                            type="text"
+                            id="${base.id}"
+                            placeholder="Enter ${base.name.toLowerCase()}"
+                            data-base="${base.base}"
+                            data-base-name="${base.name}"
+                            autocomplete="off"
+                            aria-label="${base.name} input"
+                        />
+                        <div class="error-message" id="${base.id}-error"></div>
+                    </div>
+                `).join('');
+            }
 
-function fromBinary() {
-        clearAllExcept('binary');
-        let b = document.getElementById("binary").value;
-        let d = parseInt(b, 2);
-        if (!isNaN(d)) {
-        document.getElementById("decimal").value = d;
-        document.getElementById("octal").value = d.toString(8);
-        document.getElementById("hex").value = d.toString(16).toUpperCase();
-    } else {
-        document.getElementById("decimal").value = "";
-        document.getElementById("octal").value = "";
-        document.getElementById("hex").value = "";
-    }
-    restoreListeners();
-}
+            attachEventListeners() {
+                this.bases.forEach(base => {
+                    const input = document.getElementById(base.id);
+                    input.addEventListener('input', (e) => this.handleInput(e, base));
+                    input.addEventListener('focus', (e) => this.handleFocus(e, base));
+                });
 
-function fromOctal() {
-    clearAllExcept('octal');
-    let o = document.getElementById("octal").value;
-    let d = parseInt(o, 8);
-    if (!isNaN(d)) {
-        document.getElementById("decimal").value = d;
-        document.getElementById("binary").value = d.toString(2);
-        document.getElementById("hex").value = d.toString(16).toUpperCase();
-    } else {
-        document.getElementById("decimal").value = "";
-        document.getElementById("binary").value = "";
-        document.getElementById("hex").value = "";
-    }
-    restoreListeners();
-}
+                document.getElementById('resetBtn').addEventListener('click', () => this.clearAll());
+                document.getElementById('copyAllBtn').addEventListener('click', () => this.copyAll());
+            }
 
-function fromHex() {
-    clearAllExcept('hex');
-    let h = document.getElementById("hex").value;
-    let d = parseInt(h, 16);
-    if (!isNaN(d)) {
-        document.getElementById("decimal").value = d;
-        document.getElementById("binary").value = d.toString(2);
-        document.getElementById("octal").value = d.toString(8);
-    } else {
-        document.getElementById("decimal").value = "";
-        document.getElementById("binary").value = "";
-        document.getElementById("octal").value = "";
-    }
-    restoreListeners();
-}
-</script>
-<footer>
-    <div>
-        <p class="copyright">© 2024 Darshil k prajapati. All rights reserved.</p>
-    </div>
-        
-</footer>
+            handleFocus(event, base) {
+                this.currentInput = base.id;
+            }
 
+            handleInput(event, sourceBase) {
+                const input = event.target;
+                const value = input.value.trim();
+
+                this.clearErrors();
+
+                if (value === '') {
+                    this.clearAllInputs();
+                    return;
+                }
+
+                if (!this.isValidInput(value, sourceBase.regex)) {
+                    this.showError(sourceBase.id, `Invalid ${sourceBase.name} format`);
+                    this.clearOtherInputs(sourceBase.id);
+                    return;
+                }
+
+                try {
+                    this.convertFromBase(value, sourceBase);
+                } catch (error) {
+                    this.showError(sourceBase.id, 'Conversion error: Invalid number');
+                    this.clearOtherInputs(sourceBase.id);
+                }
+            }
+
+            isValidInput(value, regex) {
+                return regex.test(value) && value !== '';
+            }
+
+            convertFromBase(value, sourceBase) {
+                let decimalValue;
+
+                switch (sourceBase.base) {
+                    case 10:
+                        decimalValue = this.parseDecimal(value);
+                        break;
+                    case 2:
+                        decimalValue = this.parseBinary(value);
+                        break;
+                    case 8:
+                        decimalValue = this.parseOctal(value);
+                        break;
+                    case 16:
+                        decimalValue = this.parseHex(value);
+                        break;
+                    default:
+                        throw new Error('Unsupported base');
+                }
+
+                if (!Number.isInteger(decimalValue) || decimalValue < 0) {
+                    throw new Error('Invalid number');
+                }
+
+                this.updateAllBases(decimalValue, sourceBase.id);
+            }
+
+            parseDecimal(value) {
+                return parseInt(value, 10);
+            }
+
+            parseBinary(value) {
+                return parseInt(value, 2);
+            }
+
+            parseOctal(value) {
+                return parseInt(value, 8);
+            }
+
+            parseHex(value) {
+                return parseInt(value, 16);
+            }
+
+            updateAllBases(decimalValue, excludeId) {
+                this.bases.forEach(base => {
+                    if (base.id !== excludeId) {
+                        const input = document.getElementById(base.id);
+                        const converted = this.convertToBase(decimalValue, base.base);
+                        input.value = converted;
+                        input.classList.remove('error');
+                    }
+                });
+            }
+
+            convertToBase(decimalValue, base) {
+                if (base === 10) {
+                    return decimalValue.toString();
+                } else if (base === 2) {
+                    return decimalValue.toString(2);
+                } else if (base === 8) {
+                    return decimalValue.toString(8);
+                } else if (base === 16) {
+                    return decimalValue.toString(16).toUpperCase();
+                }
+                return '';
+            }
+
+            clearErrors() {
+                document.querySelectorAll('.error-message').forEach(el => {
+                    el.classList.remove('show');
+                    el.textContent = '';
+                });
+                document.querySelectorAll('input[type="text"]').forEach(el => {
+                    el.classList.remove('error');
+                });
+            }
+
+            showError(inputId, message) {
+                const input = document.getElementById(inputId);
+                const errorEl = document.getElementById(`${inputId}-error`);
+                input.classList.add('error');
+                errorEl.textContent = message;
+                errorEl.classList.add('show');
+            }
+
+            clearAllInputs() {
+                this.bases.forEach(base => {
+                    document.getElementById(base.id).value = '';
+                });
+                this.clearErrors();
+            }
+
+            clearOtherInputs(excludeId) {
+                this.bases.forEach(base => {
+                    if (base.id !== excludeId) {
+                        document.getElementById(base.id).value = '';
+                    }
+                });
+            }
+
+            clearAll() {
+                this.clearAllInputs();
+            }
+
+            copyAll() {
+                const values = this.bases
+                    .map(base => `${base.name}: ${document.getElementById(base.id).value}`)
+                    .filter(str => !str.endsWith(': '))
+                    .join('\n');
+
+                if (values === '') {
+                    this.showToast('Please enter a number first');
+                    return;
+                }
+
+                navigator.clipboard.writeText(values).then(() => {
+                    this.showToast('✓ All values copied to clipboard!');
+                }).catch(() => {
+                    this.showToast('Failed to copy to clipboard');
+                });
+            }
+
+            showToast(message) {
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+        }
+
+        // Initialize the app when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new ConverterApp();
+        });
+    </script>
 </body>
 </html>
